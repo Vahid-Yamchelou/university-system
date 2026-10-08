@@ -1,0 +1,61 @@
+# ===== .NET =====
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+publish/
+*.user
+*.suo
+*.userosscache
+*.userprefs
+*.nupkg
+*.snupkg
+project.lock.json
+.vs/
+TestResults/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+
+# ===== Secrets & lokale Konfiguration =====
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+.env
+.env.*
+!.env.example
+
+# ===== Node / Angular =====
+node_modules/
+dist/
+.angular/
+out-tsc/
+.sass-cache/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ===== Playwright =====
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# ===== Docker / lokale Daten =====
+mysql_data/
+*.log
+
+# ===== IDEs =====
+.idea/
+*.swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ===== Betriebssystem =====
+.DS_Store
+Thumbs.db
