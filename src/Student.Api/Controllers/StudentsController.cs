@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Student.Api.Data;
+using Student.Api.Messaging;
 using Student.Api.Models;
 
 namespace Student.Api.Controllers;
@@ -10,7 +11,12 @@ namespace Student.Api.Controllers;
 public class StudentsController : ControllerBase
 {
     private readonly StudentDbContext _db;
-    public StudentsController(StudentDbContext db) => _db = db;
+    private readonly IEventPublisher _publisher;
+    public StudentsController(StudentDbContext db, IEventPublisher publisher)
+    {
+        _db = db;
+        _publisher = publisher;
+    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Models.Student>>> GetAll()
@@ -35,6 +41,7 @@ public class StudentsController : ControllerBase
         };
         _db.Students.Add(s);
         await _db.SaveChangesAsync();
+        await _publisher.PublishAsync("student.created", new { s.Id, s.Email, s.FirstName, s.LastName });
         return CreatedAtAction(nameof(Get), new { id = s.Id }, s);
     }
 

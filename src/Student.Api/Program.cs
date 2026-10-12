@@ -13,6 +13,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+builder.Services.AddSingleton<Student.Api.Messaging.IEventPublisher, Student.Api.Messaging.RabbitMqPublisher>();
+
 var app = builder.Build();
 
 app.MapOpenApi();
