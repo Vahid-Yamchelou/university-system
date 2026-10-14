@@ -1,9 +1,12 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Course.Api/Course.Api.csproj" />
+    <Project Path="src/Enrollment.Api/Enrollment.Api.csproj" />
     <Project Path="src/Notification.Worker/Notification.Worker.csproj" />
     <Project Path="src/Student.Api/Student.Api.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Enrollment.Tests/Enrollment.Tests.csproj" />
     <Project Path="tests/Student.Tests/Student.Tests.csproj" />
   </Folder>
 </Solution>

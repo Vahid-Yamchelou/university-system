@@ -24,18 +24,23 @@ public class Worker : BackgroundService
 
         await using var conn = await factory.CreateConnectionAsync(ct);
         await using var channel = await conn.CreateChannelAsync(cancellationToken: ct);
-        await channel.QueueDeclareAsync("student.created", durable: true,
-            exclusive: false, autoDelete: false, cancellationToken: ct);
 
-        var consumer = new AsyncEventingBasicConsumer(channel);
-        consumer.ReceivedAsync += async (_, ea) =>
+        foreach (var queue in new[] { "student.created", "enrollment.created" })
         {
-            var json = Encoding.UTF8.GetString(ea.Body.ToArray());
-            _logger.LogInformation("Willkommens-Mail wird gesendet für: {Json}", json);
-            await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
-        };
+            await channel.QueueDeclareAsync(queue, durable: true,
+                exclusive: false, autoDelete: false, cancellationToken: ct);
 
-        await channel.BasicConsumeAsync("student.created", autoAck: false, consumer, ct);
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.ReceivedAsync += async (_, ea) =>
+            {
+                var json = Encoding.UTF8.GetString(ea.Body.ToArray());
+                _logger.LogInformation("[{Queue}] E-Mail wird gesendet: {Json}", queue, json);
+                await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
+            };
+
+            await channel.BasicConsumeAsync(queue, autoAck: false, consumer, ct);
+        }
+
         await Task.Delay(Timeout.Infinite, ct);
     }
 }
